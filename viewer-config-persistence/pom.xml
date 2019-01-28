@@ -35,6 +35,10 @@
                                 <hbm2ddl export="false" drop="false" create="true" outputfilename="postgresql-schema-export.sql" format="true">
                                     <jpaconfiguration persistenceUnit="viewer-config-postgresql" />
                                 </hbm2ddl>
+
+                                <hbm2ddl export="false" drop="false" create="true" outputfilename="mssql-schema-export.sql" format="true">
+                                    <jpaconfiguration persistenceUnit="viewer-config-mssql" />
+                                </hbm2ddl>
                             </hibernatetool>
                         </configuration>
                         <goals>
