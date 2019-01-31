@@ -306,8 +306,8 @@ public class DatabaseSynchronizer implements Servlet {
             if (scripts!=null){
                 for (File script : scripts){
                     String scriptName= null;
-                    if (script.getName().startsWith(this.databaseProductName.toLowerCase()+"-")){
-                        scriptName = script.getName().substring(this.databaseProductName.length()+1);
+                    if (script.getName().startsWith(this.databaseProductName.toLowerCase().replace(' ', '_') + "-")) {
+                        scriptName = script.getName().substring(this.databaseProductName.replace(' ', '_').length() + 1);
                     }else{
                         boolean forOtherProduct=false;
                         for (String supProd : SUPPORTED_DATABASE_PRODUCTS){
@@ -368,11 +368,11 @@ public class DatabaseSynchronizer implements Servlet {
                             String scriptName=SCRIPT_PATH+"/"+script;
                             is= DatabaseSynchronizer.class.getResourceAsStream(scriptName);
                             if (is==null){
-                                scriptName= SCRIPT_PATH+"/"+ databaseProductName.toLowerCase()+"-"+script;
+                                scriptName = SCRIPT_PATH + "/" + databaseProductName.toLowerCase().replace(' ', '_') + "-" + script;
                                 is= DatabaseSynchronizer.class.getResourceAsStream(scriptName);
                             }
                             if (is==null){
-                                throw new Exception("Update script '"+script+"' nor '"+databaseProductName.toLowerCase()+"-"+script+"' can be found");
+                                throw new Exception("Update script '" + script + "' nor '" + databaseProductName.toLowerCase().replace(' ', '_') + "-" + script + "' can be found");
                             }
                             log.info("Running database upgrade script: " + scriptName);
                             runner.runScript(new InputStreamReader(is), element.canFail());

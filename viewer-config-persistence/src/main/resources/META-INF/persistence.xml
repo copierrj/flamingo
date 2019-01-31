@@ -51,10 +51,10 @@
         </properties>
     </persistence-unit>
     
-    <persistence-unit name="viewer-config-mssql" transaction-type="RESOURCE_LOCAL">
+    <persistence-unit name="viewer-config-microsoft_sql_server" transaction-type="RESOURCE_LOCAL">
         <provider>org.hibernate.ejb.HibernatePersistence</provider>
         <non-jta-data-source>java:comp/env/jdbc/geo_viewer</non-jta-data-source>
-        <mapping-file>META-INF/orm-mssql.xml</mapping-file>
+        <mapping-file>META-INF/orm-microsoft_sql_server.xml</mapping-file>
         <class>nl.b3p.viewer.config.services.GeoService</class>
         <class>nl.b3p.viewer.config.services.Category</class>
         <properties>
