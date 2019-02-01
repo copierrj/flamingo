@@ -11,10 +11,10 @@ environment:
   fast_finish: true
 
   matrix:
-  - JDK: JDK8
-    JAVA_HOME: C:\Program Files\Java\jdk1.8.0
-    SQL: MSSQL$SQL2017
-    INSTANCENAME: SQL2017
+    - JDK: JDK8
+      JAVA_HOME: C:\Program Files\Java\jdk1.8.0
+      SQL: MSSQL$SQL2017
+      INSTANCENAME: SQL2017
 
 install:
   - cmd: echo %PATH%
@@ -25,7 +25,7 @@ install:
   - cmd: keytool -importcert -file .\RootCA-G2.cer -alias G2 -keystore "%JAVA_HOME%\jre\lib\security\cacerts" -storepass changeit -v -noprompt -trustcacerts
   - ps: Invoke-WebRequest http://cert.pkioverheid.nl/RootCA-G3.cer -OutFile .\RootCA-G3.cer
   - cmd: keytool -importcert -file .\RootCA-G3.cer -alias G3 -keystore "%JAVA_HOME%\jre\lib\security\cacerts" -storepass changeit -v -noprompt -trustcacerts
-  - mvn install -U -DskipTests -pl "web-commons,viewer-commons,viewer-config-persistence" -B -V -fae -q
+  - mvn install -U -DskipTests -Dtest.skip.integrationtests=true -B -V -fae
   
 before_test:
   - sqlcmd -S (local)\%INSTANCENAME% -U sa -P Password12! -Q "CREATE DATABASE flamingo4" -d "master"

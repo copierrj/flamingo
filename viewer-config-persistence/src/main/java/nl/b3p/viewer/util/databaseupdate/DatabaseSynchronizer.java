@@ -83,7 +83,7 @@ public class DatabaseSynchronizer implements Servlet {
     static final LinkedHashMap<String, UpdateElement> updates = new LinkedHashMap<String, UpdateElement>();
     private static final String SCRIPT_PATH="/scripts";
     private String databaseProductName="postgresql";
-    private static final String[] SUPPORTED_DATABASE_PRODUCTS = {"postgresql","oracle", "mssql"};
+    private static final String[] SUPPORTED_DATABASE_PRODUCTS = {"postgresql", "oracle", "microsoft_sql_server"};
     private ServletConfig sc;
     UpdateElement uel=    new UpdateElement(new ArrayList<String>(), String.class);
     //The updates definition
@@ -95,6 +95,7 @@ public class DatabaseSynchronizer implements Servlet {
         updates.put("0", new UpdateElement (new ArrayList<String>(), String.class));
         updates.get("0").add("schema-export.sql");
         updates.get("0").add("initialize_database.sql");
+        updates.get("0").add("initialize_categories.sql");
 
         updates.put("1", new UpdateElement (new ArrayList<String>(), String.class));
         updates.get("1").add("add_solr_config.sql");
@@ -344,7 +345,10 @@ public class DatabaseSynchronizer implements Servlet {
         }
     }
 
-    public class ScriptWorker implements Work{
+    public class ScriptWorker implements Work {
+
+        private final Log LOG = LogFactory.getLog(ScriptWorker.class);
+
         LinkedHashMap<String, UpdateElement> updateScripts;
         private String successVersion=null;
         private boolean errored=false;
@@ -365,7 +369,8 @@ public class DatabaseSynchronizer implements Servlet {
                     for (String script : element.getElements()){
                         InputStream is = null;
                         try {
-                            String scriptName=SCRIPT_PATH+"/"+script;
+                            String scriptName = SCRIPT_PATH + "/" + script;
+                            LOG.debug("Start looking for: " + scriptName);
                             is= DatabaseSynchronizer.class.getResourceAsStream(scriptName);
                             if (is==null){
                                 scriptName = SCRIPT_PATH + "/" + databaseProductName.toLowerCase().replace(' ', '_') + "-" + script;
